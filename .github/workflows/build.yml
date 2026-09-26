@@ -1,6 +1,8 @@
 name: Build LunarStyle
 
-on: [workflow_dispatch, push]
+on:
+  workflow_dispatch:
+  push:
 
 jobs:
   build:
@@ -16,10 +18,11 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Extract project
+      - name: Find ZIP
         run: |
-          mkdir project
-          unzip -q LunarStyle-1.21.4-GitHub-Build.zip -d project
+          ZIP=$(find . -maxdepth 1 -type f -name "*.zip" | head -n 1)
+          echo "ZIP=$ZIP"
+          unzip -q "$ZIP" -d project
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
